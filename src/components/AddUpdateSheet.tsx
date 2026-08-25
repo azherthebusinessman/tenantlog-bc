@@ -4,6 +4,7 @@ import { ENTRY_TYPE_LABELS } from '../lib/tenantlog/types'
 import { FileDropInput } from './FileDropInput'
 import { useAddEntry } from '../lib/tenantlog/hooks'
 import { localDateISO, isFutureDate } from '../lib/tenantlog/dates'
+import { trackEvent } from '../lib/analytics'
 
 interface AddUpdateSheetProps {
   issueId: string
@@ -66,6 +67,7 @@ export function AddUpdateSheet({
       },
       {
         onSuccess: () => {
+          trackEvent('update_added')
           onClose()
         },
       },

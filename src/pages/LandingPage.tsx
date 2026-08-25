@@ -47,7 +47,7 @@ export function LandingPage() {
             marginBottom: 32,
           }}
         >
-          No accounts. No cloud. Everything stays on your device.
+          No accounts. Your records stay on your device. Anonymous usage analytics help us improve the tool.
         </p>
 
         <div

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { IssueCategory, CommsMethod } from '../lib/tenantlog/types'
 import { CATEGORY_LABELS, COMMS_METHOD_LABELS } from '../lib/tenantlog/types'
@@ -6,6 +6,7 @@ import { useCreateIssue } from '../lib/tenantlog/hooks'
 import { FileDropInput } from '../components/FileDropInput'
 import { DisclaimerNote } from '../components/DisclaimerNote'
 import { localDateISO, isFutureDate } from '../lib/tenantlog/dates'
+import { trackEvent } from '../lib/analytics'
 
 const CATEGORIES: IssueCategory[] = [
   'leak',
@@ -36,6 +37,11 @@ export function NewIssuePage() {
   const [commsMethod, setCommsMethod] = useState<CommsMethod>('text')
   const [commsFiles, setCommsFiles] = useState<File[]>([])
   const [dateError, setDateError] = useState('')
+  const startFired = useRef(false)
+  if (!startFired.current) {
+    startFired.current = true
+    trackEvent('start_issue')
+  }
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -65,6 +71,7 @@ export function NewIssuePage() {
       },
       {
         onSuccess: (issue) => {
+          trackEvent('issue_created')
           navigate(`/issues/${issue.id}`)
         },
       },

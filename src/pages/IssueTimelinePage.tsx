@@ -13,6 +13,7 @@ import { StatusChip } from '../components/StatusChip'
 import { DisclaimerNote } from '../components/DisclaimerNote'
 import { exportIssuePdf } from '../lib/tenantlog/pdf'
 import { formatDate } from '../lib/tenantlog/dates'
+import { trackEvent } from '../lib/analytics'
 
 export function IssueTimelinePage() {
   const { id } = useParams<{ id: string }>()
@@ -65,6 +66,7 @@ export function IssueTimelinePage() {
     setExporting(true)
     try {
       await exportIssuePdf(id)
+      trackEvent('pdf_exported')
     } catch (err) {
       alert('Export failed: ' + (err instanceof Error ? err.message : 'Unknown error'))
     } finally {
